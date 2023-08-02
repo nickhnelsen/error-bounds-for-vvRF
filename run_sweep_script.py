@@ -21,7 +21,7 @@ def make_save_path(test_str, pth = "/VVRF_"):
 print(sys.argv)
 m = int(sys.argv[1])                    # number of features
 n = int(sys.argv[2])                    # training sample size
-var_pow = int(sys.argv[3])              # 10^-(var_pow) is the noise variance
+J = int(sys.argv[3])                    # 10^-(var_pow) is the data resolution
 
 # Logistic
 data_path = "data/burgers_data_R10.mat"                     # path to dataset
