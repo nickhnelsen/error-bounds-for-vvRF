@@ -36,7 +36,7 @@ python -u run_sweep_script.py M N J
 where
 * ``M`` is the number of random features,
 * ``N`` is the number of training data pairs,
-* ``J`` is the desired spatial resolution for training (testing is always performed on the $8192$ grid).
+* ``J`` is the desired spatial resolution for training and testing.
 
 The code defaults to running on GPU, if one is available.
 
