@@ -135,10 +135,10 @@ print('Total Train and Test Error Time Elapsed: ', time.time() - start, 'seconds
 
 # %% Save to file
 if FLAG_SAVE:
-    np.save(save_path + 'errors_train_r_b', np.asarray([e_train, b_train]).cpu())
+    np.save(save_path + 'errors_train_r_b', np.asarray([e_train, b_train]))
     np.save(save_path + 'errors_train.npy', errors_train.cpu().numpy())
     
-    np.save(save_path + 'errors_test_r_b', np.asarray([e_test, b_test]).cpu())
+    np.save(save_path + 'errors_test_r_b', np.asarray([e_test, b_test]))
     np.save(save_path + 'errors_test.npy', errors_test.cpu().numpy())
     
     np.save(save_path + 'grf_g.npy', rfm.grf_g.cpu().numpy())

@@ -26,7 +26,7 @@ for N in "${Ns[@]}"
 do
 for M in "${Ms[@]}"
 do
-    srun python -u run_sweep_script.py $M $N $J | tee result_J${J}_m${M}_n${N}.out
+    srun python -u run_sweep_script.py $M $N $J ${1} | tee result_idx${1}_J${J}_m${M}_n${N}.out
 done
 done
 done
