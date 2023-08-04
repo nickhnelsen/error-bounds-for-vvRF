@@ -30,7 +30,7 @@ FLAG_SAVE = True
 newseed = None              # e.g.: None or int(datetime.today().strftime('%Y%m%d'))
 
 # Problem
-lam_const = 1e-6
+lam_const = 1e-8
 lamreg = n/m
 K = J                     # resolution, must be power of two
 ntest = 500                 # testing sample size (maximum is 2048 - n)
