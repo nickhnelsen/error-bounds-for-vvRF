@@ -1,15 +1,13 @@
 import torch
 import numpy as np
 import time
-# from datetime import datetime
 
 import os, sys
 from utilities_module import DataReader
 from RFM import RandomFeatureModel
 
 # Output directory
-def make_save_path(test_str, pth = "/VVRF_"):
-    # save_path = "results/" + datetime.today().strftime('%Y-%m-%d') + pth + test_str +"/"
+def make_save_path(test_str, pth = "/vvRF_"):
     save_path = "results" + pth + test_str +"/"
     return save_path
 
@@ -120,9 +118,9 @@ if FLAG_SAVE:
 # %% Least squares train and regularization grid sweep
 start = time.time() 
 rfm.fit()
-if var_noise == 0:
+# if var_noise == 0:
     # e_reg = rfm.regsweep([1e-1, 5e-2, 1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5])
-    e_reg = rfm.regsweep([1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12])
+    # e_reg = rfm.regsweep([1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12])
 print('Total Time Elapsed: ', time.time() - start, 'seconds.') # print run time
 print('\n RKHS Norm of coeff:', torch.linalg.norm(rfm.al_model.cpu()).item()/np.sqrt(rfm.m),'; Max coeff:', torch.max(torch.abs(rfm.al_model.cpu())).item())
 
