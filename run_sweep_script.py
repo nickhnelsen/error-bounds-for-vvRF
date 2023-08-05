@@ -21,8 +21,7 @@ J = int(sys.argv[3])                    # 10^-(var_pow) is the data resolution
 idx_MC = int(sys.argv[4])               # Monte Carlo run number
 
 # Logistic
-# data_path = "data/burgers_data_R10.mat"                     # path to dataset
-data_path = '/groups/astuart/nnelsen/data/burgers/zl_data_burg/burgers_data_R10.mat'
+data_path = "data/burgers_data_R10.mat"                     # path to dataset
 TEST_STR = "idx" + str(idx_MC) + "_J" + str(J)
 user_comment = "vvRF_paper_runs_HPC"
 FLAG_SAVE = True
