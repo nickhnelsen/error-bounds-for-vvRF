@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import time
-from datetime import datetime
+# from datetime import datetime
 
 import os, sys
 from utilities_module import DataReader
@@ -9,7 +9,8 @@ from RFM import RandomFeatureModel
 
 # Output directory
 def make_save_path(test_str, pth = "/VVRF_"):
-    save_path = "results/" + datetime.today().strftime('%Y-%m-%d') + pth + test_str +"/"
+    # save_path = "results/" + datetime.today().strftime('%Y-%m-%d') + pth + test_str +"/"
+    save_path = "results" + pth + test_str +"/"
     return save_path
 
 # %% Problem Setup
@@ -30,7 +31,7 @@ FLAG_SAVE = True
 newseed = None              # e.g.: None or int(datetime.today().strftime('%Y%m%d'))
 
 # Problem
-lam_const = 1e-8
+lam_const = 1e-4
 lamreg = n/m
 K = J                     # resolution, must be power of two
 ntest = 500                 # testing sample size (maximum is 2048 - n)
@@ -93,7 +94,7 @@ dataset_shuffle_idx = torch.randperm(input_train.shape[0])
 input_train = input_train[dataset_shuffle_idx, ...]
 output_train = output_train[dataset_shuffle_idx, ...]
 
-# extract
+# extract train
 input_train = input_train[:n, ...]
 output_train = output_train[:n, ...]
 
