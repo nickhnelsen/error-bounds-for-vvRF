@@ -33,11 +33,11 @@ lam_const = 1e-4
 lamreg = n/m
 K = J                     # resolution, must be power of two
 ntest = 500                 # testing sample size (maximum is 2048 - n)
-bsize_train = 50
+bsize_train = 10
 bsize_test = 50
-bsize_grf_train = 100
-bsize_grf_test = 100
-bsize_grf_sample = 500
+bsize_grf_train = 10
+bsize_grf_test = 50
+bsize_grf_sample = 100
 kmax = 64                   # zero pad after kmax RF GRF modes, kmax <= K//2
 var_noise = 0
 
