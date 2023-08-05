@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NMC=10
-declare -a Js=("512" "2048" "8192")
+declare -a Js=("256" "1024" "4096")
 
 dir_name="./results/"
 mkdir -p ${dir_name}

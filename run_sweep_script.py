@@ -37,7 +37,7 @@ bsize_train = 10
 bsize_test = 50
 bsize_grf_train = 10
 bsize_grf_test = 50
-bsize_grf_sample = 500
+bsize_grf_sample = 100
 kmax = 64                   # zero pad after kmax RF GRF modes, kmax <= K//2
 var_noise = 0
 
