@@ -5,7 +5,7 @@ from datetime import datetime
 
 import os, sys
 from utilities_module import DataReader
-from RFM import RandomFeatureModel, regsweep
+from RFM import RandomFeatureModel
 
 # Output directory
 def make_save_path(test_str, pth = "/VVRF_"):
