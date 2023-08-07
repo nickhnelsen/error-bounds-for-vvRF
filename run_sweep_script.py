@@ -30,7 +30,7 @@ newseed = None              # e.g.: None or int(datetime.today().strftime('%Y%m%
 
 # Problem
 lam_const = 1e-4
-lamreg = n/m
+lamreg = n/m * lam_const
 K = J                     # resolution, must be power of two
 ntest = 500                 # testing sample size (maximum is 2048 - n)
 bsize_train = 10
