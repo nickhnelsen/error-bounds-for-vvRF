@@ -6,9 +6,14 @@ import os, sys
 from utilities_module import DataReader
 from RFM import RandomFeatureModel
 
-# Output directory
-def make_save_path(test_str, pth = "/vvRF_"):
-    save_path = "results" + pth + test_str +"/"
+def make_save_path(test_str, mypth):
+    '''
+    Create path to output directory
+    Example of input:
+        test_str = 'my_exp_num23_parametersHERE'
+        mypth = './results/'
+    '''
+    save_path = mypth + "vvRF_" + test_str +"/"
     return save_path
 
 # %% Problem Setup
@@ -18,27 +23,28 @@ print(sys.argv)
 m = int(sys.argv[1])                    # number of features
 n = int(sys.argv[2])                    # training sample size
 J = int(sys.argv[3])                    # data resolution
-idx_MC = int(sys.argv[4])               # Monte Carlo run number
+idx_MC = int(sys.argv[4])               # Monte Carlo/experiment run number
+lamreg = float(sys.argv[5])             # regularization strength as in vvRF '23 paper
+my_path = sys.argv[6]                   # directory to save output
 
 # Logistic
 # data_path = "data/burgers_data_R10.mat"                     # path to dataset
 data_path = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/data/burgers_data_R10.mat'
 # data_path = '/groups/astuart/nnelsen/data/burgers/zl_data_burg/burgers_data_R10.mat'
-TEST_STR = "idx" + str(idx_MC) + "_J" + str(J)
+TEST_STR = "idx" + str(idx_MC) + "_J" + str(J) + "m" + str(m) + "n" + str(n)
 user_comment = "vvRF_paper_runs_HPC"
 FLAG_SAVE = True
 newseed = None              # e.g.: None or int(datetime.today().strftime('%Y%m%d'))
 
 # Problem
-lam_const = 1e-4
-lamreg = n/m * lam_const
+lamreg = n * lamreg
 K = J                     # resolution, must be power of two
 ntest = 500                 # testing sample size (maximum is 2048 - n)
 bsize_train = 25
 bsize_test = 50
 bsize_grf_train = 50
 bsize_grf_test = 100
-bsize_grf_sample = 100
+bsize_grf_sample = 500
 kmax = 64                   # zero pad after kmax RF GRF modes, kmax <= K//2
 var_noise = 0
 
@@ -61,16 +67,12 @@ tau_g = 15.045227
 al_g = 2.9943917
 
 # %% File I/O
-if TEST_STR is None:
-    TEST_STR = "m" + str(m) +"n" + str(n)
-else:
-    TEST_STR = TEST_STR + "m" + str(m) + "n" + str(n)
-    
-save_path = make_save_path(TEST_STR)
 
+save_path = make_save_path(TEST_STR, my_path)
 os.makedirs(save_path, exist_ok=True)
 
 # %% Process data
+
 if n + ntest > 2048:
     raise ValueError("ERROR: n + ntest must be less than 2048 + 1 for the Burgers' dataset.")
 
@@ -98,7 +100,9 @@ input_train = input_train[:n, ...]
 output_train = output_train[:n, ...]
 
 # %% Setup model and save hyperparameters
+
 dev = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print("Device is", dev)
 
 if newseed is not None:
     np.random.seed(newseed)
@@ -117,12 +121,14 @@ if FLAG_SAVE:
     np.save(save_path + "hyperparameters.npy", hyp_array)
 
 # %% Least squares train and regularization grid sweep
+
 start = time.time() 
 rfm.fit()
 print('Total Time Elapsed: ', time.time() - start, 'seconds.') # print run time
 print('\n RKHS Norm of coeff:', torch.linalg.norm(rfm.al_model.cpu()).item()/np.sqrt(rfm.m),'; Max coeff:', torch.max(torch.abs(rfm.al_model.cpu())).item())
 
 # %% Global expected relative train and test errors
+
 print("\n Global expected relative train and test errors:")
 start = time.time() 
 e_train, b_train, errors_train = rfm.relative_error_train(FLAG_GETERRORS=True)
@@ -132,12 +138,14 @@ print('Expected relative error (Test, Boch. Test):', (e_test, b_test))
 print('Total Train and Test Error Time Elapsed: ', time.time() - start, 'seconds.') # print run time
 
 # %% Regsweep
+
 if var_noise == 0:
     e_reg = rfm.regsweep([1e-1, 5e-2, 1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5, 1e-5, 5e-6, 1e-6])
     # e_reg = rfm.regsweep([1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12])
 print('\n RKHS Norm of sweeped coeff:', torch.linalg.norm(rfm.al_model.cpu()).item()/np.sqrt(rfm.m),'; Max sweeped coeff:', torch.max(torch.abs(rfm.al_model.cpu())).item())
 
 # %% Save to file
+
 if FLAG_SAVE:
     np.save(save_path + 'errors_train_r_b.npy', np.asarray([e_train, b_train]))
     np.save(save_path + 'errors_train.npy', errors_train.cpu().numpy())
