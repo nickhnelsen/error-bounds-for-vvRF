@@ -31,7 +31,7 @@ In the script ``train.py``, assign in the variable ``data_path`` the global path
 
 The example may then be run as
 ```
-python -u train.py M N J 0 my_path
+python -u train.py M N J 0 lambda my_path
 ```
 where
 * ``M`` is the number of random features,
