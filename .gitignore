@@ -147,4 +147,5 @@ examples/results/
 *~
 
 # paths
-
+**/results*
+**/figures*

@@ -10,18 +10,19 @@
 #SBATCH --mail-user=username@domain.edu
 #SBATCH --mail-type=FAIL
 
-echo MCidx${1}_resolutionJ${2}
+echo MCidx${1}_resolutionJ${2}_mypath${3}
 
 conda activate operator
 
-declare -a Ns=("10" "23" "54" "124" "288" "668" "1548")
+const_M="0.0007"
+declare -a Ns=("124" "1548")
 declare -a Ms=("10" "32" "100" "316" "1000" "3162" "10000")
 
-for N in "${Ns[@]}"
-do
-for M in "${Ms[@]}"
-do
-    srun python -u run_sweep_script.py ${M} ${N} ${2} ${1}
+for N in "${Ns[@]}"; do
+    for M in "${Ms[@]}"; do
+        lam=$(bc -l <<< "${const_M}/${M}")
+        srun python -u train.py ${M} ${N} ${2} ${1} ${lam} ${3}
+    done
 done
-done
+
 echo done
