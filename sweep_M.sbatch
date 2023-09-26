@@ -7,13 +7,12 @@
 #SBATCH --mem=32G
 #SBATCH --gres gpu:1
 #SBATCH --export=ALL
-#SBATCH --mail-user=nnelsen@caltech.edu
+#SBATCH --mail-user=username@domain.edu
 #SBATCH --mail-type=FAIL
 
 echo MCidx${1}_resolutionJ${2}_mypath${3}
 
-source /home/nnelsen/miniconda3/etc/profile.d/conda.sh
-conda activate fno
+conda activate operator
 
 const_M="0.0007"
 declare -a Ns=("124" "1548")
