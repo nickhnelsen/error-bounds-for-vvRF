@@ -27,16 +27,18 @@ The particular setup used in this example comes from [zongyi-li/fourier_neural_o
 Please download ``Burgers_R10.zip`` which contains the dataset file ``burgers_data_R10.mat``. There are $2048$ input-outpairs at spatial resolution $8192$.
 
 ## Running the example
-In the script ``run_sweep_script.py``, assign in the variable ``data_path`` the global path to the data file ``burgers_data_R10.mat``.
+In the script ``train.py``, assign in the variable ``data_path`` the global path to the data file ``burgers_data_R10.mat``.
 
 The example may then be run as
 ```
-python -u run_sweep_script.py M N J
+python -u train.py M N J 0 my_path
 ```
 where
 * ``M`` is the number of random features,
 * ``N`` is the number of training data pairs,
 * ``J`` is the desired spatial resolution for training and testing.
+* ``lambda`` is the regularization parameter
+* ``my_path`` is the output directory
 
 The code defaults to running on GPU, if one is available.
 

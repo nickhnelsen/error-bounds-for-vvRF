@@ -28,9 +28,7 @@ lamreg = float(sys.argv[5])             # regularization strength as in vvRF '23
 my_path = sys.argv[6]                   # directory to save output
 
 # Logistic
-# data_path = "data/burgers_data_R10.mat"                     # path to dataset
-# data_path = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/data/burgers_data_R10.mat'
-data_path = '/groups/astuart/nnelsen/data/burgers/zl_data_burg/burgers_data_R10.mat'
+data_path = "data/burgers_data_R10.mat"                     # path to dataset
 TEST_STR = "idx" + str(idx_MC) + "_J" + str(J) + "m" + str(m) + "n" + str(n)
 user_comment = "vvRF_paper_runs_HPC"
 FLAG_SAVE = True

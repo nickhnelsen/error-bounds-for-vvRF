@@ -36,8 +36,7 @@ N_fix = N_list[-1] # [-1] = 1548, N_list[-4] = 124
 M_list = np.round(10**np.linspace(1, 4, 7)).astype(int)[:-2]
 
 # %% Fix N
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results/vvRF_'
-# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M/vvRF_'
+pref = './results_sweep_M/vvRF_'
 errors_M_sweep = np.zeros((len(J_list),len(M_list),2,idx_max + 1))
 for idx in range(idx_max + 1):
     for i, J in enumerate(J_list):
@@ -85,8 +84,7 @@ if FLAG_SAVE:
 
 
 # Fix M
-# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results/vvRF_'
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N/vvRF_'
+pref = './results_sweep_N/vvRF_'
 errors_N_sweep = np.zeros((len(J_list),len(N_list),2,idx_max + 1))
 for idx in range(idx_max + 1):
     for i, J in enumerate(J_list):
