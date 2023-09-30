@@ -1,4 +1,4 @@
-# Code for the paper ``Error Bounds for Learning with Vector-Valued Random Features''
+# Code for the 2023 NeurIPS Spotlight paper ``Error Bounds for Learning with Vector-Valued Random Features''
 
 ## Installation
 The command
