@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=32G
+#SBATCH --mem=16G
 #SBATCH --gres gpu:1
 #SBATCH --export=ALL
 #SBATCH --mail-user=nnelsen@caltech.edu
@@ -12,6 +12,7 @@
 
 echo MCidx${1}_resolutionJ${2}_mypath${3}
 
+source /home/nnelsen/miniconda3/etc/profile.d/conda.sh
 conda activate fno
 
 const_M="0.0007"
