@@ -5,6 +5,7 @@ import time
 import os, sys
 from utilities_module import DataReader
 from RFM import RandomFeatureModel
+from gaussian_random_fields import GaussianRF
 
 def make_save_path(test_str, mypth):
     '''
@@ -35,6 +36,7 @@ TEST_STR = "idx" + str(idx_MC) + "_J" + str(J) + "m" + str(m) + "n" + str(n)
 user_comment = "vvRF_paper_runs_HPC"
 FLAG_SAVE = True
 newseed = None              # e.g.: None or int(datetime.today().strftime('%Y%m%d'))
+FLAG_NOISE = True
 
 # Problem
 lamreg = n * lamreg
@@ -46,7 +48,7 @@ bsize_grf_train = 50
 bsize_grf_test = 100
 bsize_grf_sample = 500
 kmax = 64                   # zero pad after kmax RF GRF modes, kmax <= K//2
-var_noise = 0
+var_noise = 0.05 # percent of noise to add to data
 
 # %% Pre-trained hyperparameters for Burgers' dataset (using alternating LBFGS)
 
@@ -72,6 +74,9 @@ save_path = make_save_path(TEST_STR, my_path)
 os.makedirs(save_path, exist_ok=True)
 
 # %% Process data
+
+dev = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print("Device is", dev)
 
 if n + ntest > 2048:
     raise ValueError("ERROR: n + ntest must be less than 2048 + 1 for the Burgers' dataset.")
@@ -99,10 +104,16 @@ output_train = output_train[dataset_shuffle_idx, ...]
 input_train = input_train[:n, ...]
 output_train = output_train[:n, ...]
 
-# %% Setup model and save hyperparameters
+# add noise to training data outputs
+if FLAG_NOISE:
+    GRF = GaussianRF(dim=1, size=4096, alpha=0.6, tau=1.0, sigma=None, device=dev)
+    for batch_idx, y in zip(torch.split(torch.arange(output_train.shape[0]), bsize_train),
+                            torch.split(output_train, bsize_train)):
+        tmp = GRF.sample(y.shape[0]).cpu()[..., ::round(4096/K)]
+        tmp = var_noise*(torch.trapz(y*y, dx=1.0/K)**0.5)[...,None]*tmp
+        output_train[batch_idx,...] += tmp
 
-dev = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print("Device is", dev)
+# %% Setup model and save hyperparameters
 
 if newseed is not None:
     np.random.seed(newseed)
@@ -139,9 +150,9 @@ print('Total Train and Test Error Time Elapsed: ', time.time() - start, 'seconds
 
 # %% Regsweep
 
-if var_noise == 0:
-    e_reg = rfm.regsweep([1e-1, 5e-2, 1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5, 1e-5, 5e-6, 1e-6])
-    # e_reg = rfm.regsweep([1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12])
+# if var_noise == 0:
+e_reg = rfm.regsweep([1e-1, 5e-2, 1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5, 1e-5, 5e-6, 1e-6])
+# e_reg = rfm.regsweep([1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12])
 print('\n RKHS Norm of sweeped coeff:', torch.linalg.norm(rfm.al_model.cpu()).item()/np.sqrt(rfm.m),'; Max sweeped coeff:', torch.max(torch.abs(rfm.al_model.cpu())).item())
 
 # %% Save to file
