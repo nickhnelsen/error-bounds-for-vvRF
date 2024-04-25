@@ -15,6 +15,7 @@ plt.close("all")
 
 # er_fname = "errors_reg.npy"
 er_fname = "errors_test_r_b.npy"
+al_fname = "al_model.npy"
 suf = 'diag' # boch2_sweep
 FLAG_SAVE = True
 idx_max = 9
@@ -24,6 +25,7 @@ style_list = ['C0d:', 'C1s-.', 'C2o--']
 color_list = ['C0', 'C1', 'C2']
 leg_list = [r'$p=256$', r'$p=1024$', r'$p=4096$']
 ll = True
+ll_al = not True
 fsd = not True
 
 J_list = np.asarray([256, 1024, 4096])
@@ -39,12 +41,20 @@ J_list = np.asarray([256, 1024, 4096])
 N_list = np.asarray((2, 5, 16, 49, 155, 490, 1548))
 M_list = np.asarray((100, 178, 316, 562, 1000, 1778, 3162))
 
-pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
+# pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
 
+alnorm_M_sweep = np.zeros((len(J_list),len(M_list),idx_max + 1))
 errors_M_sweep = np.zeros((len(J_list),len(M_list),2,idx_max + 1))
 for idx in range(idx_max + 1):
     for i, J in enumerate(J_list):
         for j, (M, N) in enumerate(zip(M_list, N_list)):
+            alnorm_M_sweep[i,j,idx] = np.sqrt(np.mean(np.load(pref + 'idx' + str(idx)
+                                          + '_J' + str(J)
+                                          + 'm' + str(M)
+                                          + 'n' + str(N)
+                                          + '/' + al_fname)**2)) # M-norm of \hat{\alpha}
+            
             if er_fname == "errors_reg.npy":
                 errors_M_sweep[i,j,...,idx] = np.min(np.load(pref + 'idx' + str(idx)
                                                   + '_J' + str(J)
@@ -58,6 +68,11 @@ for idx in range(idx_max + 1):
                                               + 'm' + str(M)
                                               + 'n' + str(N)
                                               + '/' + er_fname)**2
+
+alnorm_M_sweep_std = np.std(alnorm_M_sweep,axis=-1)
+alnorm_M_sweep_mean = np.mean(alnorm_M_sweep,axis=-1)
+lb_al = alnorm_M_sweep_mean - n_std*alnorm_M_sweep_std
+ub_al = alnorm_M_sweep_mean + n_std*alnorm_M_sweep_std
 
 errors_M_sweep_std = np.std(errors_M_sweep,axis=-1)
 errors_M_sweep_mean = np.mean(errors_M_sweep,axis=-1)
@@ -84,6 +99,27 @@ plt.grid(axis='both')
 if FLAG_SAVE:
     plotter.save_plot(f0, 'figures/' + 'Mdiag_N' + '_' + suf + '.pdf')
     
+# Plot alpha hat
+idx_plot_M = 2
+for i in range(len(J_list)):
+    f0 = plotter.plot_oneD(idx_plot_M, M_list, alnorm_M_sweep_mean[i,...], linestyle_str=style_list[i], loglog=ll_al, legendlab_str=leg_list[i], fig_sz_default=fsd, xlab_str1D=r'$M$', ylab_str1D=r'$\|\widehat{\alpha}\|_M$')
+    plt.fill_between(M_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
+plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
+plt.grid(axis='both')
+plt.xscale('log')
+if FLAG_SAVE:
+    plotter.save_plot(f0, 'figures/' + 'Mdiag_M_alpha' + '_' + suf + '.pdf')
+
+idx_plot_M = 20
+for i in range(len(J_list)):
+    f0 = plotter.plot_oneD(idx_plot_M, N_list, alnorm_M_sweep_mean[i,...], linestyle_str=style_list[i], loglog=ll_al, legendlab_str=leg_list[i], fig_sz_default=fsd, xlab_str1D=r'$N$', ylab_str1D=r'$\|\widehat{\alpha}\|_{M_N}$')
+    plt.fill_between(N_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
+plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
+plt.grid(axis='both')
+plt.xscale('log')
+if FLAG_SAVE:
+    plotter.save_plot(f0, 'figures/' + 'Mdiag_N_alpha' + '_' + suf + '.pdf')
+    
 # idx_plot_M = 10
 # plt.figure(idx_plot_M, figsize=(5.1667,5.1667))
 # for i in range(len(M_list)):
@@ -101,12 +137,20 @@ if FLAG_SAVE:
 N_list = np.asarray((10, 23, 54, 124, 288, 668, 1548))
 M_list = np.asarray((254, 385, 591, 895, 1364, 2077, 3162))
 
-pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
+# pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
 
+alnorm_N_sweep = np.zeros((len(J_list),len(N_list),idx_max + 1))
 errors_N_sweep = np.zeros((len(J_list),len(N_list),2,idx_max + 1))
 for idx in range(idx_max + 1):
     for i, J in enumerate(J_list):
         for j, (M, N) in enumerate(zip(M_list, N_list)):
+            alnorm_N_sweep[i,j,idx] = np.sqrt(np.mean(np.load(pref + 'idx' + str(idx)
+                                          + '_J' + str(J)
+                                          + 'm' + str(M)
+                                          + 'n' + str(N)
+                                          + '/' + al_fname)**2)) # M-norm of \hat{\alpha}
+            
             if er_fname == "errors_reg.npy":
                 errors_N_sweep[i,j,...,idx] = np.min(np.load(pref + 'idx' + str(idx)
                                                   + '_J' + str(J)
@@ -120,6 +164,11 @@ for idx in range(idx_max + 1):
                                               + 'm' + str(M)
                                               + 'n' + str(N)
                                               + '/' + er_fname)**2
+
+alnorm_N_sweep_std = np.std(alnorm_N_sweep,axis=-1)
+alnorm_N_sweep_mean = np.mean(alnorm_N_sweep,axis=-1)
+lb_al = alnorm_N_sweep_mean - n_std*alnorm_N_sweep_std
+ub_al = alnorm_N_sweep_mean + n_std*alnorm_N_sweep_std
 
 errors_N_sweep_std = np.std(errors_N_sweep,axis=-1)
 errors_N_sweep_mean = np.mean(errors_N_sweep,axis=-1)
@@ -145,6 +194,27 @@ plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggab
 plt.grid(axis='both')
 if FLAG_SAVE:
     plotter.save_plot(f1, 'figures/' + 'Ndiag_M' + '_' + suf + '.pdf')
+    
+# Plot alpha hat
+idx_plot_N = 3
+for i in range(len(J_list)):
+    f1 = plotter.plot_oneD(idx_plot_N, N_list, alnorm_N_sweep_mean[i,...], linestyle_str=style_list[i], loglog=ll_al, legendlab_str=leg_list[i], fig_sz_default=fsd, xlab_str1D=r'$N$', ylab_str1D=r'$\|\widehat{\alpha}\|_{M_N}$')
+    plt.fill_between(N_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
+plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
+plt.grid(axis='both')
+plt.xscale('log')
+if FLAG_SAVE:
+    plotter.save_plot(f1, 'figures/' + 'Ndiag_N_alpha' + '_' + suf + '.pdf')
+
+idx_plot_N = 30
+for i in range(len(J_list)):
+    f1 = plotter.plot_oneD(idx_plot_N, M_list, alnorm_N_sweep_mean[i,...], linestyle_str=style_list[i], loglog=ll_al, legendlab_str=leg_list[i], fig_sz_default=fsd, xlab_str1D=r'$M$', ylab_str1D=r'$\|\widehat{\alpha}\|_{M}$')
+    plt.fill_between(M_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
+plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
+plt.grid(axis='both')
+plt.xscale('log')
+if FLAG_SAVE:
+    plotter.save_plot(f1, 'figures/' + 'Ndiag_M_alpha' + '_' + suf + '.pdf')
 
 # plt.figure(idx_plot_N, figsize=(5.1667,5.1667))
 # for i in range(len(N_list)):
