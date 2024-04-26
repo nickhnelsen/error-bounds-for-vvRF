@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=32G
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:p100:1
 #SBATCH --partition=gpu
 #SBATCH --export=ALL
 #SBATCH --mail-user=nnelsen@caltech.edu
