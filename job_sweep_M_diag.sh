@@ -4,7 +4,7 @@ idx_start=0
 NMC=10
 declare -a Js=("256" "1024" "4096")
 
-dir_name="./results_sweep_M_diag_noisy/"
+dir_name="./results_sweep_M_diag_noisy15/"
 mkdir -p ${dir_name}
 
 COUNT=0

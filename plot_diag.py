@@ -16,7 +16,7 @@ plt.close("all")
 # er_fname = "errors_reg.npy"
 er_fname = "errors_test_r_b.npy"
 al_fname = "al_model.npy"
-suf = 'diag' # boch2_sweep
+suf = 'diag_log_noisy' # boch2_sweep
 FLAG_SAVE = True
 idx_max = 9
 n_std = 2
@@ -25,7 +25,7 @@ style_list = ['C0d:', 'C1s-.', 'C2o--']
 color_list = ['C0', 'C1', 'C2']
 leg_list = [r'$p=256$', r'$p=1024$', r'$p=4096$']
 ll = True
-ll_al = not True
+ll_al = True
 fsd = not True
 
 J_list = np.asarray([256, 1024, 4096])
@@ -42,7 +42,8 @@ N_list = np.asarray((2, 5, 16, 49, 155, 490, 1548))
 M_list = np.asarray((100, 178, 316, 562, 1000, 1778, 3162))
 
 # pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
+# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag_noisy/vvRF_'
 
 alnorm_M_sweep = np.zeros((len(J_list),len(M_list),idx_max + 1))
 errors_M_sweep = np.zeros((len(J_list),len(M_list),2,idx_max + 1))
@@ -106,7 +107,10 @@ for i in range(len(J_list)):
     plt.fill_between(M_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
 plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
 plt.grid(axis='both')
-plt.xscale('log')
+if not ll_al:
+    plt.xscale('log')
+else:
+    plt.ylim(bottom=4e-1)
 if FLAG_SAVE:
     plotter.save_plot(f0, 'figures/' + 'Mdiag_M_alpha' + '_' + suf + '.pdf')
 
@@ -116,7 +120,10 @@ for i in range(len(J_list)):
     plt.fill_between(N_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
 plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
 plt.grid(axis='both')
-plt.xscale('log')
+if not ll_al:
+    plt.xscale('log')
+else:
+    plt.ylim(bottom=4e-1)
 if FLAG_SAVE:
     plotter.save_plot(f0, 'figures/' + 'Mdiag_N_alpha' + '_' + suf + '.pdf')
     
@@ -138,7 +145,8 @@ N_list = np.asarray((10, 23, 54, 124, 288, 668, 1548))
 M_list = np.asarray((254, 385, 591, 895, 1364, 2077, 3162))
 
 # pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
+# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag_noisy/vvRF_'
 
 alnorm_N_sweep = np.zeros((len(J_list),len(N_list),idx_max + 1))
 errors_N_sweep = np.zeros((len(J_list),len(N_list),2,idx_max + 1))
@@ -202,7 +210,10 @@ for i in range(len(J_list)):
     plt.fill_between(N_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
 plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
 plt.grid(axis='both')
-plt.xscale('log')
+if not ll_al:
+    plt.xscale('log')
+else:
+    plt.ylim(bottom=4e-0)
 if FLAG_SAVE:
     plotter.save_plot(f1, 'figures/' + 'Ndiag_N_alpha' + '_' + suf + '.pdf')
 
@@ -212,7 +223,10 @@ for i in range(len(J_list)):
     plt.fill_between(M_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
 plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
 plt.grid(axis='both')
-plt.xscale('log')
+if not ll_al:
+    plt.xscale('log')
+else:
+    plt.ylim(bottom=4e-0)
 if FLAG_SAVE:
     plotter.save_plot(f1, 'figures/' + 'Ndiag_M_alpha' + '_' + suf + '.pdf')
 

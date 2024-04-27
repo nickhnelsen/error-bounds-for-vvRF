@@ -48,7 +48,7 @@ bsize_grf_train = 50
 bsize_grf_test = 100
 bsize_grf_sample = 500
 kmax = 64                   # zero pad after kmax RF GRF modes, kmax <= K//2
-var_noise = 0.05 # percent of noise to add to data
+var_noise = 0.15 # percent of noise to add to data
 
 # %% Pre-trained hyperparameters for Burgers' dataset (using alternating LBFGS)
 
