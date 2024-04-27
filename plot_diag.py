@@ -16,8 +16,8 @@ plt.close("all")
 # er_fname = "errors_reg.npy"
 er_fname = "errors_test_r_b.npy"
 al_fname = "al_model.npy"
-suf = 'diag_log_noisy' # boch2_sweep
-FLAG_SAVE = True
+suf = 'diag_log_noisy15' # boch2_sweep
+FLAG_SAVE = not True
 idx_max = 9
 n_std = 2
 
@@ -43,7 +43,8 @@ M_list = np.asarray((100, 178, 316, 562, 1000, 1778, 3162))
 
 # pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
 # pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag/vvRF_'
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag_noisy/vvRF_'
+# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag_noisy/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_M_diag_noisy15/vvRF_'
 
 alnorm_M_sweep = np.zeros((len(J_list),len(M_list),idx_max + 1))
 errors_M_sweep = np.zeros((len(J_list),len(M_list),2,idx_max + 1))
@@ -99,12 +100,17 @@ plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggab
 plt.grid(axis='both')
 if FLAG_SAVE:
     plotter.save_plot(f0, 'figures/' + 'Mdiag_N' + '_' + suf + '.pdf')
-    
+   
+## %% temp
+# plt.close("all")
+
+# TODO: temp
 # Plot alpha hat
 idx_plot_M = 2
 for i in range(len(J_list)):
     f0 = plotter.plot_oneD(idx_plot_M, M_list, alnorm_M_sweep_mean[i,...], linestyle_str=style_list[i], loglog=ll_al, legendlab_str=leg_list[i], fig_sz_default=fsd, xlab_str1D=r'$M$', ylab_str1D=r'$\|\widehat{\alpha}\|_M$')
     plt.fill_between(M_list, lb_al[i,...], ub_al[i,...], facecolor=color_list[i], alpha=0.2)
+# f0 = plotter.plot_oneD(idx_plot_M, M_list, 2e-4*M_list**(1.9), xlab_str1D=r'$M$', linestyle=(0, (3, 1, 1, 1, 1, 1)), linestyle_str='darkgray', legendlab_str=r'$M^{1.9}$', fig_sz_default=fsd)
 plt.legend(loc='best',borderpad=borderpad,handlelength=handlelength).set_draggable(True)
 plt.grid(axis='both')
 if not ll_al:
@@ -113,6 +119,10 @@ else:
     plt.ylim(bottom=4e-1)
 if FLAG_SAVE:
     plotter.save_plot(f0, 'figures/' + 'Mdiag_M_alpha' + '_' + suf + '.pdf')
+    
+# plt.show()
+
+## %%
 
 idx_plot_M = 20
 for i in range(len(J_list)):
@@ -146,7 +156,8 @@ M_list = np.asarray((254, 385, 591, 895, 1364, 2077, 3162))
 
 # pref = '/home/nnelsen/code/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
 # pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag/vvRF_'
-pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag_noisy/vvRF_'
+# pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag_noisy/vvRF_'
+pref = '/media/nnelsen/SharedHDD2TB/datasets/error-bounds-for-vvRF/results_sweep_N_diag_noisy15/vvRF_'
 
 alnorm_N_sweep = np.zeros((len(J_list),len(N_list),idx_max + 1))
 errors_N_sweep = np.zeros((len(J_list),len(N_list),2,idx_max + 1))
