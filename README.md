@@ -46,4 +46,5 @@ The code defaults to running on GPU, if one is available.
 - [Error Bounds for Learning with Vector-Valued Random Features](https://arxiv.org/abs/2305.17170)
 - [The Random Feature Model for Input-Output Maps between Banach Spaces](https://arxiv.org/abs/2005.10224)
 - [Fourier Neural Operator for Parametric Partial Differential Equations](https://arxiv.org/abs/2010.08895)
+- [Operator Learning Using Random Features: A Tool for Scientific Computing](https://doi.org/10.1137/24M1648703)
 
